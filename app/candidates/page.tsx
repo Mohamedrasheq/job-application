@@ -10,7 +10,7 @@ export default function CandidatesPage() {
   const router = useRouter()
   const [candidateEmail, setCandidateEmail] = useState<string | null>(null)
   const [candidateName, setCandidateName] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState<"resume" | "allJobs" | "matchingJobs" | "applications">("resume")
+  const [activeTab, setActiveTab] = useState<"resume" | "allJobs" | "matchingJobs" | "applications" | "templates">("resume")
   const [resume, setResume] = useState<any | null>(null)
   const [jobs, setJobs] = useState<any[]>([])
   const [filteredJobs, setFilteredJobs] = useState<any[]>([])
@@ -25,6 +25,312 @@ export default function CandidatesPage() {
     skills: "",
     summary: "",
   })
+
+  // Resume template data
+  const templateData = {
+    professional: {
+      name: "Professional Template",
+      style: "professional",
+      sections: [
+        { type: "header", title: "Professional Resume" },
+        { type: "contact", fields: ["name", "email", "phone", "location"] },
+        { type: "summary", title: "Professional Summary" },
+        { type: "experience", title: "Work Experience" },
+        { type: "education", title: "Education" },
+        { type: "skills", title: "Skills", format: "list" }
+      ]
+    },
+    creative: {
+      name: "Creative Template",
+      style: "creative",
+      sections: [
+        { type: "header", title: "Creative Portfolio" },
+        { type: "profile", includes: ["photo", "name", "title", "bio"] },
+        { type: "experience", title: "Creative Experience" },
+        { type: "projects", title: "Portfolio Projects" },
+        { type: "skills", title: "Creative Skills", format: "tags" },
+        { type: "education", title: "Education" }
+      ]
+    },
+    technical: {
+      name: "Technical Template",
+      style: "technical",
+      sections: [
+        { type: "header", title: "Technical Resume" },
+        { type: "contact", fields: ["name", "email", "phone", "github", "linkedin"] },
+        { type: "skills", title: "Technical Skills", format: "categories" },
+        { type: "experience", title: "Professional Experience" },
+        { type: "projects", title: "Technical Projects" },
+        { type: "education", title: "Education & Certifications" }
+      ]
+    },
+    executive: {
+      name: "Executive Template",
+      style: "executive",
+      sections: [
+        { type: "header", title: "Executive Resume" },
+        { type: "contact", fields: ["name", "title", "email", "phone", "linkedin"] },
+        { type: "summary", title: "Executive Summary" },
+        { type: "highlights", title: "Career Highlights" },
+        { type: "experience", title: "Leadership Experience" },
+        { type: "education", title: "Education" },
+        { type: "skills", title: "Core Competencies", format: "columns" }
+      ]
+    },
+    graduate: {
+      name: "Graduate Template",
+      style: "graduate",
+      sections: [
+        { type: "header", title: "Graduate Resume" },
+        { type: "contact", fields: ["name", "email", "phone", "location"] },
+        { type: "education", title: "Education" },
+        { type: "coursework", title: "Relevant Coursework" },
+        { type: "experience", title: "Experience" },
+        { type: "skills", title: "Skills", format: "list" },
+        { type: "activities", title: "Activities & Honors" }
+      ]
+    }
+  };
+
+  // Function to handle PDF download
+  const handlePdfDownload = (templateType: string) => {
+    // Create a template data object with user data if available
+    const userData = {
+      name: candidateName || "Your Name",
+      email: candidateEmail || "your.email@example.com",
+      phone: "123-456-7890",
+      location: "City, State",
+      github: "github.com/username",
+      linkedin: "linkedin.com/in/username",
+      summary: resumeForm.summary || "Professional summary goes here",
+      education: resumeForm.education || "Education details go here",
+      experience: resumeForm.experience || "Experience details go here",
+      skills: resumeForm.skills || "Skills list goes here",
+    };
+
+    // Combine template structure with user data
+    const template = templateData[templateType as keyof typeof templateData];
+    const combinedData = { ...template, userData };
+    
+    // Create filename
+    const filename = `${template.name.replace(/\s+/g, '-').toLowerCase()}-resume.pdf`;
+    
+    // In a real app, we would generate a PDF here
+    // For this demo, we'll create a text representation and convert it to a Blob
+    const pdfContent = `
+      ${template.name}
+      --------------------
+      
+      Name: ${userData.name}
+      Contact: ${userData.email} | ${userData.phone}
+      
+      SUMMARY
+      -------
+      ${userData.summary}
+      
+      EXPERIENCE
+      ----------
+      ${userData.experience}
+      
+      EDUCATION
+      ---------
+      ${userData.education}
+      
+      SKILLS
+      ------
+      ${userData.skills}
+    `;
+    
+    // Create a Blob from the text content
+    const blob = new Blob([pdfContent], { type: 'application/pdf' });
+    
+    // Create download link
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    
+    // Cleanup
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    // Show success message
+    setSuccessMessage(`${template.name} downloaded as PDF`);
+    setTimeout(() => setSuccessMessage(""), 3000);
+  };
+  
+  // Function to handle JSON download
+  const handleJsonDownload = (templateType: string) => {
+    // Create a template data object with user data if available
+    const userData = {
+      name: candidateName || "Your Name",
+      email: candidateEmail || "your.email@example.com",
+      phone: "123-456-7890",
+      location: "City, State",
+      github: "github.com/username",
+      linkedin: "linkedin.com/in/username",
+      summary: resumeForm.summary || "Professional summary goes here",
+      education: resumeForm.education || "Education details go here",
+      experience: resumeForm.experience || "Experience details go here",
+      skills: resumeForm.skills || "Skills list goes here",
+    };
+
+    // Combine template structure with user data
+    const template = templateData[templateType as keyof typeof templateData];
+    const combinedData = { ...template, userData };
+    
+    // Create filename
+    const filename = `${template.name.replace(/\s+/g, '-').toLowerCase()}-resume.json`;
+    
+    // Convert data to JSON string
+    const jsonContent = JSON.stringify(combinedData, null, 2);
+    
+    // Create a Blob from the JSON string
+    const blob = new Blob([jsonContent], { type: 'application/json' });
+    
+    // Create download link
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    
+    // Cleanup
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    // Show success message
+    setSuccessMessage(`${template.name} downloaded as JSON`);
+    setTimeout(() => setSuccessMessage(""), 3000);
+  };
+
+  // Function to handle profile export as JSON
+  const handleExportProfileJson = () => {
+    if (!candidateEmail) {
+      setError("Please sign in to export your profile");
+      return;
+    }
+    
+    const profileData = {
+      name: candidateName,
+      email: candidateEmail,
+      summary: resumeForm.summary,
+      education: resumeForm.education,
+      experience: resumeForm.experience,
+      skills: resumeForm.skills,
+      applications: applications.length,
+    };
+    
+    // Create filename
+    const filename = `${candidateName?.replace(/\s+/g, '-').toLowerCase() || 'profile'}-data.json`;
+    
+    // Convert data to JSON string
+    const jsonContent = JSON.stringify(profileData, null, 2);
+    
+    // Create a Blob from the JSON string
+    const blob = new Blob([jsonContent], { type: 'application/json' });
+    
+    // Create download link
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    
+    // Cleanup
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    // Show success message
+    setSuccessMessage("Profile data exported as JSON");
+    setTimeout(() => setSuccessMessage(""), 3000);
+  };
+  
+  // Function to generate PDF from profile
+  const handleGenerateProfilePdf = () => {
+    if (!candidateEmail) {
+      setError("Please sign in to generate a PDF");
+      return;
+    }
+    
+    // In a real app, we would generate a PDF here
+    // For this demo, we'll create a text representation and convert it to a Blob
+    const pdfContent = `
+      ${candidateName}'s Resume
+      --------------------
+      
+      Name: ${candidateName}
+      Contact: ${candidateEmail}
+      
+      SUMMARY
+      -------
+      ${resumeForm.summary}
+      
+      EXPERIENCE
+      ----------
+      ${resumeForm.experience}
+      
+      EDUCATION
+      ---------
+      ${resumeForm.education}
+      
+      SKILLS
+      ------
+      ${resumeForm.skills}
+    `;
+    
+    // Create a Blob from the text content
+    const blob = new Blob([pdfContent], { type: 'application/pdf' });
+    
+    // Create filename
+    const filename = `${candidateName?.replace(/\s+/g, '-').toLowerCase() || 'profile'}-resume.pdf`;
+    
+    // Create download link
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    
+    // Cleanup
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    // Show success message
+    setSuccessMessage("Resume generated as PDF");
+    setTimeout(() => setSuccessMessage(""), 3000);
+  };
+
+  // Add a function to handle auto-expanding text areas
+  const autoResizeTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textarea = e.target;
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }
+
+  // Combine input change and auto-resize in one handler
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setResumeForm((prev) => ({ ...prev, [name]: value }))
+    
+    // Auto-resize if it's a textarea
+    if (e.target.tagName.toLowerCase() === 'textarea') {
+      autoResizeTextarea(e as React.ChangeEvent<HTMLTextAreaElement>);
+    }
+  }
 
   useEffect(() => {
     // Check if user is logged in
@@ -138,11 +444,6 @@ export default function CandidatesPage() {
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setResumeForm((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleSubmitResume = async (e: React.FormEvent) => {
@@ -566,10 +867,11 @@ export default function CandidatesPage() {
         <div className="mb-6">
           <nav className="flex space-x-4 border-b border-gray-200">
             {[
-              { id: "resume", label: "My Resume" },
+              { id: "resume", label: "Details to find the job" },
               { id: "matchingJobs", label: "Matching Jobs" },
               { id: "allJobs", label: "All Jobs" },
               { id: "applications", label: "My Applications" },
+              { id: "templates", label: "Resume Templates" },
             ].map((tab) => (
               <motion.button
                 key={tab.id}
@@ -598,7 +900,7 @@ export default function CandidatesPage() {
               className="bg-white rounded-lg shadow-sm p-6"
             >
               <motion.div variants={itemVariants} className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold text-gray-900">My Resume</h2>
+                <h2 className="text-2xl font-semibold text-gray-900">Details to find the job</h2>
                 <div className="text-sm text-gray-500">
                   {resume ? "Last updated: " + new Date(resume.updated_at).toLocaleDateString() : "No resume yet"}
                 </div>
@@ -644,11 +946,13 @@ export default function CandidatesPage() {
                   <textarea
                     id="summary"
                     name="summary"
-                    rows={3}
+                    rows={1}
                     value={resumeForm.summary}
                     onChange={handleInputChange}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 min-h-[40px] text-left flex items-center py-2 pl-4"
                     placeholder="Brief overview of your professional background and goals"
+                    onFocus={autoResizeTextarea}
+                    style={{ display: 'flex', alignItems: 'center' }}
                   />
                 </div>
 
@@ -659,11 +963,13 @@ export default function CandidatesPage() {
                   <textarea
                     id="education"
                     name="education"
-                    rows={4}
+                    rows={1}
                     value={resumeForm.education}
                     onChange={handleInputChange}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 min-h-[40px] text-left flex items-center py-2 pl-4"
                     placeholder="List your educational qualifications, degrees, and institutions"
+                    onFocus={autoResizeTextarea}
+                    style={{ display: 'flex', alignItems: 'center' }}
                   />
                 </div>
 
@@ -674,11 +980,13 @@ export default function CandidatesPage() {
                   <textarea
                     id="experience"
                     name="experience"
-                    rows={5}
+                    rows={1}
                     value={resumeForm.experience}
                     onChange={handleInputChange}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 min-h-[40px] text-left flex items-center py-2 pl-4"
                     placeholder="Detail your work history, responsibilities, and achievements"
+                    onFocus={autoResizeTextarea}
+                    style={{ display: 'flex', alignItems: 'center' }}
                   />
                 </div>
 
@@ -692,8 +1000,9 @@ export default function CandidatesPage() {
                     name="skills"
                     value={resumeForm.skills}
                     onChange={handleInputChange}
-                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500"
+                    className="w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 text-left h-[40px] pl-4"
                     placeholder="e.g. JavaScript, React, Node.js, Project Management"
+                    style={{ lineHeight: '40px' }}
                   />
                 </div>
 
@@ -1206,6 +1515,389 @@ export default function CandidatesPage() {
               )}
             </motion.div>
           )}
+
+          {activeTab === "templates" && (
+            <motion.div
+              key="templates"
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={containerVariants}
+            >
+              <motion.div variants={itemVariants} className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-semibold text-gray-900">Resume Templates</h2>
+                <div className="text-sm text-gray-500">Quick-start with professional templates</div>
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 mt-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-blue-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-blue-800">Template Information</h3>
+                    <div className="mt-2 text-sm text-blue-700">
+                      <p>Choose from one of our professionally designed resume templates to get started quickly.</p>
+                      <p className="mt-1">You can download templates in PDF format for printing or JSON format for easy editing and importing.</p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Template 1 - Professional */}
+                <motion.div
+                  variants={itemVariants}
+                  whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+                  className="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 border border-gray-200"
+                >
+                  <div className="relative h-64 bg-gray-100">
+                    <div className="absolute inset-0 p-4 flex flex-col">
+                      <div className="bg-teal-600 h-6 w-full mb-4"></div>
+                      <div className="flex h-32">
+                        <div className="w-1/3 bg-teal-100 h-full"></div>
+                        <div className="w-2/3 p-2">
+                          <div className="h-4 bg-gray-300 w-3/4 mb-2"></div>
+                          <div className="h-3 bg-gray-300 w-1/2 mb-4"></div>
+                          <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                          <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                          <div className="h-2 bg-gray-200 w-3/4"></div>
+                        </div>
+                      </div>
+                      <div className="mt-4 p-2">
+                        <div className="h-3 bg-teal-600 w-1/4 mb-2"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                        <div className="h-2 bg-gray-200 w-4/5"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 mb-1">Professional Template</h3>
+                    <p className="text-sm text-gray-500 mb-4">Clean and traditional layout perfect for corporate roles</p>
+                    <div className="flex space-x-2">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-3 py-1 bg-teal-100 text-teal-700 rounded text-sm flex items-center"
+                        onClick={() => handlePdfDownload('professional')}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        PDF
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm flex items-center"
+                        onClick={() => handleJsonDownload('professional')}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        JSON
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Template 2 - Creative */}
+                <motion.div
+                  variants={itemVariants}
+                  whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+                  className="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 border border-gray-200"
+                >
+                  <div className="relative h-64 bg-gray-100">
+                    <div className="absolute inset-0 p-4 flex flex-col">
+                      <div className="flex justify-center mb-3">
+                        <div className="w-20 h-20 bg-purple-500 rounded-full"></div>
+                      </div>
+                      <div className="text-center mb-4">
+                        <div className="h-4 bg-gray-300 w-1/2 mx-auto mb-2"></div>
+                        <div className="h-3 bg-gray-300 w-1/3 mx-auto"></div>
+                      </div>
+                      <div className="mt-2">
+                        <div className="h-3 bg-purple-500 w-1/4 mb-2"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                        <div className="h-2 bg-gray-200 w-4/5 mb-3"></div>
+                        
+                        <div className="h-3 bg-purple-500 w-1/4 mb-2"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 mb-1">Creative Template</h3>
+                    <p className="text-sm text-gray-500 mb-4">Modern design ideal for creative and design positions</p>
+                    <div className="flex space-x-2">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-3 py-1 bg-purple-100 text-purple-700 rounded text-sm flex items-center"
+                        onClick={() => handlePdfDownload('creative')}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        PDF
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm flex items-center"
+                        onClick={() => handleJsonDownload('creative')}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        JSON
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+                
+                {/* Template 3 - Technical */}
+                <motion.div
+                  variants={itemVariants}
+                  whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+                  className="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 border border-gray-200"
+                >
+                  <div className="relative h-64 bg-gray-100">
+                    <div className="absolute inset-0 p-4 flex flex-col">
+                      <div className="mb-4">
+                        <div className="h-5 bg-blue-600 w-3/4 mb-2"></div>
+                        <div className="h-3 bg-gray-300 w-1/2"></div>
+                      </div>
+                      <div className="flex h-40">
+                        <div className="w-2/3 pr-2">
+                          <div className="h-3 bg-blue-600 w-1/3 mb-2"></div>
+                          <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                          <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                          <div className="h-2 bg-gray-200 w-4/5 mb-4"></div>
+                          
+                          <div className="h-3 bg-blue-600 w-1/3 mb-2"></div>
+                          <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                          <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                        </div>
+                        <div className="w-1/3 pl-2">
+                          <div className="h-3 bg-blue-600 w-2/3 mb-2"></div>
+                          <div className="bg-gray-200 rounded-full h-2 mb-2"></div>
+                          <div className="bg-gray-200 rounded-full h-2 mb-2"></div>
+                          <div className="bg-gray-200 rounded-full h-2 mb-2"></div>
+                          <div className="bg-gray-200 rounded-full h-2 mb-2"></div>
+                          <div className="bg-gray-200 rounded-full h-2"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 mb-1">Technical Template</h3>
+                    <p className="text-sm text-gray-500 mb-4">Skills-focused layout for technical and IT professionals</p>
+                    <div className="flex space-x-2">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm flex items-center"
+                        onClick={() => handlePdfDownload('technical')}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        PDF
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm flex items-center"
+                        onClick={() => handleJsonDownload('technical')}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        JSON
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+                
+                {/* Template 4 - Executive */}
+                <motion.div
+                  variants={itemVariants}
+                  whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+                  className="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 border border-gray-200"
+                >
+                  <div className="relative h-64 bg-gray-100">
+                    <div className="absolute inset-0 p-4 flex flex-col">
+                      <div className="border-b-4 border-gray-800 pb-4 mb-4">
+                        <div className="h-5 bg-gray-800 w-1/2 mb-2"></div>
+                        <div className="h-3 bg-gray-300 w-3/4 mb-1"></div>
+                        <div className="h-3 bg-gray-300 w-2/5"></div>
+                      </div>
+                      <div className="mb-4">
+                        <div className="h-3 bg-gray-800 w-1/4 mb-2"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                        <div className="h-2 bg-gray-200 w-4/5"></div>
+                      </div>
+                      <div className="mb-4">
+                        <div className="h-3 bg-gray-800 w-1/4 mb-2"></div>
+                        <div className="flex mb-1">
+                          <div className="w-1/4 h-2 bg-gray-400"></div>
+                          <div className="w-3/4 pl-2">
+                            <div className="h-2 bg-gray-200 w-full"></div>
+                          </div>
+                        </div>
+                        <div className="flex mb-1">
+                          <div className="w-1/4 h-2 bg-gray-400"></div>
+                          <div className="w-3/4 pl-2">
+                            <div className="h-2 bg-gray-200 w-full"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 mb-1">Executive Template</h3>
+                    <p className="text-sm text-gray-500 mb-4">Sophisticated design for senior leadership positions</p>
+                    <div className="flex space-x-2">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-3 py-1 bg-gray-200 text-gray-700 rounded text-sm flex items-center"
+                        onClick={() => handlePdfDownload('executive')}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        PDF
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm flex items-center"
+                        onClick={() => handleJsonDownload('executive')}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        JSON
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+                
+                {/* Template 5 - Graduate */}
+                <motion.div
+                  variants={itemVariants}
+                  whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+                  className="bg-white rounded-lg shadow-sm overflow-hidden transition-all duration-300 border border-gray-200"
+                >
+                  <div className="relative h-64 bg-gray-100">
+                    <div className="h-24 bg-green-500 absolute top-0 left-0 right-0"></div>
+                    <div className="absolute inset-0 p-4 flex flex-col">
+                      <div className="mt-12 bg-white p-2 mx-2 rounded shadow-sm z-10">
+                        <div className="h-4 bg-gray-300 w-1/2 mx-auto mb-1"></div>
+                        <div className="h-3 bg-gray-300 w-3/4 mx-auto mb-1"></div>
+                        <div className="flex justify-center mt-2 space-x-1">
+                          <div className="h-2 w-2 rounded-full bg-gray-400"></div>
+                          <div className="h-2 w-2 rounded-full bg-gray-400"></div>
+                          <div className="h-2 w-2 rounded-full bg-gray-400"></div>
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <div className="h-3 bg-green-500 w-1/4 mb-2"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-4"></div>
+                        
+                        <div className="h-3 bg-green-500 w-1/4 mb-2"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                        <div className="h-2 bg-gray-200 w-full mb-1"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 mb-1">Graduate Template</h3>
+                    <p className="text-sm text-gray-500 mb-4">Education-focused design for recent graduates and students</p>
+                    <div className="flex space-x-2">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-3 py-1 bg-green-100 text-green-700 rounded text-sm flex items-center"
+                        onClick={() => handlePdfDownload('graduate')}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        PDF
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm flex items-center"
+                        onClick={() => handleJsonDownload('graduate')}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        JSON
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+              
+              <motion.div 
+                variants={itemVariants}
+                className="mt-8 p-6 bg-white rounded-lg shadow-sm border border-gray-200"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Custom Resume Creation</h3>
+                <p className="text-gray-600 mb-4">
+                  Want to create a custom resume using your existing profile information? You can generate a resume based on the details you've provided in your profile.
+                </p>
+                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleGenerateProfilePdf}
+                    className="px-4 py-2 bg-gradient-to-r from-teal-500 to-blue-500 text-white rounded-md hover:from-teal-600 hover:to-blue-600 transition shadow-sm flex items-center justify-center"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Generate PDF from Profile
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleExportProfileJson}
+                    className="px-4 py-2 bg-white border border-teal-500 text-teal-600 rounded-md hover:bg-teal-50 transition shadow-sm flex items-center justify-center"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Export Profile as JSON
+                  </motion.button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+          
         </AnimatePresence>
       </main>
 
@@ -1742,7 +2434,12 @@ export default function CandidatesPage() {
                               viewBox="0 0 24 24"
                               stroke="currentColor"
                             >
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 13l4 4L19 7"
+                              />
                             </svg>
                           )}
                           <span>{skill.trim()}</span>

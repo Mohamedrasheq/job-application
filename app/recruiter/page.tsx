@@ -14,6 +14,7 @@ export default function RecruiterPage() {
   const [selectedJob, setSelectedJob] = useState<any | null>(null)
   const [applications, setApplications] = useState<any[]>([])
   const [showJobForm, setShowJobForm] = useState(false)
+  const [showAllTools, setShowAllTools] = useState(false)
   const [loading, setLoading] = useState(true)
   const [formData, setFormData] = useState({
     title: "",
@@ -1400,11 +1401,210 @@ export default function RecruiterPage() {
             <motion.button
               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(79, 70, 229, 0.5)" }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => setShowAllTools(!showAllTools)}
               className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-white font-medium shadow-lg"
             >
-              Explore All Tools
+              {showAllTools ? "Hide Tools" : "Explore All Tools"}
             </motion.button>
           </motion.div>
+
+          <AnimatePresence>
+            {showAllTools && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mt-12 overflow-hidden"
+              >
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    whileHover={{ y: -5 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20"
+                  >
+                    <div className="w-12 h-12 bg-indigo-500/20 rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">Bulk Job Posting</h3>
+                    <p className="text-blue-100 mb-3 text-sm">Create multiple job listings at once by importing from spreadsheets or templates.</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="text-sm px-3 py-1.5 bg-indigo-500/20 hover:bg-indigo-500/30 rounded-md text-indigo-100 border border-indigo-400/30 transition"
+                    >
+                      Create Bulk Posts
+                    </motion.button>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    whileHover={{ y: -5 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20"
+                  >
+                    <div className="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-orange-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">Email Campaigns</h3>
+                    <p className="text-blue-100 mb-3 text-sm">Send personalized emails to candidates and automate follow-up communication.</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="text-sm px-3 py-1.5 bg-orange-500/20 hover:bg-orange-500/30 rounded-md text-orange-100 border border-orange-400/30 transition"
+                    >
+                      Create Campaign
+                    </motion.button>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    whileHover={{ y: -5 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20"
+                  >
+                    <div className="w-12 h-12 bg-pink-500/20 rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-pink-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">Video Interviews</h3>
+                    <p className="text-blue-100 mb-3 text-sm">Schedule and conduct video interviews with candidates directly from the platform.</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="text-sm px-3 py-1.5 bg-pink-500/20 hover:bg-pink-500/30 rounded-md text-pink-100 border border-pink-400/30 transition"
+                    >
+                      Schedule Interview
+                    </motion.button>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    whileHover={{ y: -5 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20"
+                  >
+                    <div className="w-12 h-12 bg-cyan-500/20 rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">Assessment Tests</h3>
+                    <p className="text-blue-100 mb-3 text-sm">Create custom skills assessments and personality tests for candidates.</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="text-sm px-3 py-1.5 bg-cyan-500/20 hover:bg-cyan-500/30 rounded-md text-cyan-100 border border-cyan-400/30 transition"
+                    >
+                      Create Tests
+                    </motion.button>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    whileHover={{ y: -5 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20"
+                  >
+                    <div className="w-12 h-12 bg-amber-500/20 rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">Resume Parser</h3>
+                    <p className="text-blue-100 mb-3 text-sm">Extract key information from resumes to quickly identify qualified candidates.</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="text-sm px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 rounded-md text-amber-100 border border-amber-400/30 transition"
+                    >
+                      Parse Resumes
+                    </motion.button>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    whileHover={{ y: -5 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20"
+                  >
+                    <div className="w-12 h-12 bg-lime-500/20 rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-lime-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">Workflow Builder</h3>
+                    <p className="text-blue-100 mb-3 text-sm">Create custom hiring workflows with automated steps and approval processes.</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="text-sm px-3 py-1.5 bg-lime-500/20 hover:bg-lime-500/30 rounded-md text-lime-100 border border-lime-400/30 transition"
+                    >
+                      Build Workflow
+                    </motion.button>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                    whileHover={{ y: -5 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20"
+                  >
+                    <div className="w-12 h-12 bg-rose-500/20 rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-rose-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">Recruitment Reports</h3>
+                    <p className="text-blue-100 mb-3 text-sm">Generate detailed reports on recruitment metrics and talent acquisition performance.</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="text-sm px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 rounded-md text-rose-100 border border-rose-400/30 transition"
+                    >
+                      View Reports
+                    </motion.button>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 }}
+                    whileHover={{ y: -5 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20"
+                  >
+                    <div className="w-12 h-12 bg-violet-500/20 rounded-full flex items-center justify-center mb-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-violet-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold mb-2">Candidate Portal</h3>
+                    <p className="text-blue-100 mb-3 text-sm">Give candidates access to a personalized portal to track their application status.</p>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="text-sm px-3 py-1.5 bg-violet-500/20 hover:bg-violet-500/30 rounded-md text-violet-100 border border-violet-400/30 transition"
+                    >
+                      View Portal
+                    </motion.button>
+                  </motion.div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
 
