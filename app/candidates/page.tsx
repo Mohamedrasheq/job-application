@@ -355,13 +355,13 @@ export default function CandidatesPage() {
       </div>
 
       {/* Animated particles */}
-      {Array.from({ length: 15 }).map((_, i) => (
+      {typeof window !== 'undefined' && Array.from({ length: 15 }).map((_, i) => (
         <motion.div
           key={`particle-${i}`}
           className="absolute rounded-full bg-teal-500 bg-opacity-20"
           initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
+            x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
+            y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 800),
             scale: Math.random() * 0.5 + 0.5,
           }}
           animate={{
