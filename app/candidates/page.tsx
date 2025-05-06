@@ -25,6 +25,7 @@ export default function CandidatesPage() {
     skills: "",
     summary: "",
   })
+  const [openResourceModal, setOpenResourceModal] = useState<"resume" | "interview" | "career" | null>(null)
 
   // Resume template data
   const templateData = {
@@ -88,6 +89,100 @@ export default function CandidatesPage() {
         { type: "experience", title: "Experience" },
         { type: "skills", title: "Skills", format: "list" },
         { type: "activities", title: "Activities & Honors" }
+      ]
+    }
+  };
+
+  // Resource content data
+  const resourceContent = {
+    resume: {
+      title: "Resume Building Tips",
+      content: [
+        {
+          subtitle: "Highlight Your Achievements",
+          text: "Focus on accomplishments rather than just listing responsibilities. Use specific metrics and results where possible to demonstrate your impact."
+        },
+        {
+          subtitle: "Tailor Your Resume",
+          text: "Customize your resume for each job application. Highlight relevant skills and experience that match the job description."
+        },
+        {
+          subtitle: "Keep It Concise",
+          text: "Most recruiters spend only 6-7 seconds scanning a resume. Keep your resume to 1-2 pages maximum and use bullet points for better readability."
+        },
+        {
+          subtitle: "Use Keywords",
+          text: "Many companies use Applicant Tracking Systems (ATS) to filter resumes. Include relevant keywords from the job description to ensure your resume passes through."
+        },
+        {
+          subtitle: "Professional Format",
+          text: "Use a clean, professional design with consistent formatting. Avoid fancy fonts or excessive graphics that might not render properly in ATS systems."
+        }
+      ],
+      resources: [
+        { name: "Resume Templates", link: "#templates" },
+        { name: "Action Verbs for Resumes", link: "#" },
+        { name: "Industry-Specific Resume Examples", link: "#" }
+      ]
+    },
+    interview: {
+      title: "Interview Preparation Guide",
+      content: [
+        {
+          subtitle: "Research the Company",
+          text: "Learn about the company's mission, values, products, and recent news. Understanding the company helps you tailor your answers and ask informed questions."
+        },
+        {
+          subtitle: "Practice Common Questions",
+          text: "Prepare answers for frequently asked questions like 'Tell me about yourself', 'Why do you want this job?', and 'What are your strengths and weaknesses?'"
+        },
+        {
+          subtitle: "Prepare STAR Stories",
+          text: "Use the STAR method (Situation, Task, Action, Result) to structure examples from your experience that demonstrate your skills."
+        },
+        {
+          subtitle: "Prepare Questions",
+          text: "Have thoughtful questions ready to ask the interviewer about the role, team, and company. This shows your interest and engagement."
+        },
+        {
+          subtitle: "Virtual Interview Tips",
+          text: "If interviewing remotely, test your technology, ensure good lighting, find a quiet space, and dress professionally from head to toe."
+        }
+      ],
+      resources: [
+        { name: "100 Common Interview Questions", link: "#" },
+        { name: "Behavioral Interview Techniques", link: "#" },
+        { name: "Virtual Interview Best Practices", link: "#" }
+      ]
+    },
+    career: {
+      title: "Career Growth Strategies",
+      content: [
+        {
+          subtitle: "Set Clear Goals",
+          text: "Define short-term and long-term career goals. Be specific about what you want to achieve and by when."
+        },
+        {
+          subtitle: "Develop New Skills",
+          text: "Continuously learn and upgrade your skills through courses, certifications, workshops, and on-the-job training."
+        },
+        {
+          subtitle: "Build Your Network",
+          text: "Connect with professionals in your field through industry events, LinkedIn, and professional associations."
+        },
+        {
+          subtitle: "Seek Feedback",
+          text: "Regularly ask for constructive feedback from managers, mentors, and peers to identify areas for improvement."
+        },
+        {
+          subtitle: "Track Your Achievements",
+          text: "Document your accomplishments, projects completed, and positive feedback to use when applying for promotions or new roles."
+        }
+      ],
+      resources: [
+        { name: "Career Planning Worksheets", link: "#" },
+        { name: "Online Learning Platforms", link: "#" },
+        { name: "Professional Networking Tips", link: "#" }
       ]
     }
   };
@@ -1945,7 +2040,12 @@ export default function CandidatesPage() {
             <p className="text-gray-600 mb-4">
               Learn how to create a standout resume that highlights your skills and experience effectively.
             </p>
-            <a href="#" className="text-teal-600 hover:text-teal-800 font-medium flex items-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setOpenResourceModal("resume")}
+              className="text-teal-600 hover:text-teal-800 font-medium flex items-center"
+            >
               <span>Read More</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1956,7 +2056,7 @@ export default function CandidatesPage() {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </a>
+            </motion.button>
           </motion.div>
 
           <motion.div
@@ -1987,7 +2087,12 @@ export default function CandidatesPage() {
             <p className="text-gray-600 mb-4">
               Prepare for your interviews with our comprehensive guides and practice questions.
             </p>
-            <a href="#" className="text-blue-600 hover:text-blue-800 font-medium flex items-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setOpenResourceModal("interview")}
+              className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
+            >
               <span>Read More</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1998,7 +2103,7 @@ export default function CandidatesPage() {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </a>
+            </motion.button>
           </motion.div>
 
           <motion.div
@@ -2024,7 +2129,12 @@ export default function CandidatesPage() {
             <p className="text-gray-600 mb-4">
               Discover strategies for advancing your career and achieving your professional goals.
             </p>
-            <a href="#" className="text-purple-600 hover:text-purple-800 font-medium flex items-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setOpenResourceModal("career")}
+              className="text-purple-600 hover:text-purple-800 font-medium flex items-center"
+            >
               <span>Read More</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -2035,7 +2145,7 @@ export default function CandidatesPage() {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
-            </a>
+            </motion.button>
           </motion.div>
         </div>
       </section>
@@ -2519,6 +2629,88 @@ export default function CandidatesPage() {
                     <span>Apply Now</span>
                   </motion.button>
                 )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Resource Content Modal */}
+      <AnimatePresence>
+        {openResourceModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 max-h-[80vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    {resourceContent[openResourceModal].title}
+                  </h2>
+                  <div className="h-1 w-20 bg-gradient-to-r from-teal-500 to-blue-500 mt-2"></div>
+                </div>
+                <motion.button
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setOpenResourceModal(null)}
+                  className="text-gray-400 hover:text-gray-500 transition-all"
+                >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </motion.button>
+              </div>
+
+              <div className="space-y-6 mb-8">
+                {resourceContent[openResourceModal].content.map((item, index) => (
+                  <motion.div 
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="bg-gray-50 rounded-lg p-4 border border-gray-100"
+                  >
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.subtitle}</h3>
+                    <p className="text-gray-700">{item.text}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Helpful Resources</h3>
+                <ul className="space-y-2">
+                  {resourceContent[openResourceModal].resources.map((resource, index) => (
+                    <motion.li
+                      key={index}
+                      whileHover={{ x: 5 }}
+                      className="flex items-center text-blue-600 hover:text-blue-800"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      <a href={resource.link} className="font-medium">{resource.name}</a>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-8 flex justify-end">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setOpenResourceModal(null)}
+                  className="px-4 py-2 bg-gradient-to-r from-teal-500 to-blue-500 text-white rounded hover:from-teal-600 hover:to-blue-600 transition shadow-sm"
+                >
+                  Close
+                </motion.button>
               </div>
             </motion.div>
           </motion.div>
