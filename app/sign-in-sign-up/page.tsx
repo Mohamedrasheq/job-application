@@ -2,9 +2,56 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
+
+// Define a CountUp component for the animation
+interface CountUpProps {
+  start: number;
+  end: number;
+  duration: number;
+  delay: number;
+  suffix?: string;
+}
+
+const CountUp = ({ start, end, duration, delay, suffix = "" }: CountUpProps) => {
+  const [count, setCount] = useState(start);
+  
+  useEffect(() => {
+    let startTime: number | undefined;
+    let animationFrame: number | undefined;
+    
+    const updateCount = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = timestamp - startTime;
+      const timeProgress = Math.min(progress / (duration * 1000), 1);
+      
+      // Use easeOutExpo for a nice animation curve
+      const easeOutExpo = 1 - Math.pow(2, -10 * timeProgress);
+      const currentCount = Math.floor(start + (end - start) * easeOutExpo);
+      
+      setCount(currentCount);
+      
+      if (timeProgress < 1) {
+        animationFrame = requestAnimationFrame(updateCount);
+      }
+    };
+    
+    const delayTimeout = setTimeout(() => {
+      animationFrame = requestAnimationFrame(updateCount);
+    }, delay * 1000);
+    
+    return () => {
+      clearTimeout(delayTimeout);
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+    };
+  }, [start, end, duration, delay]);
+  
+  return <>{count}{suffix}</>;
+};
 
 export default function LandingPage() {
   const router = useRouter()
@@ -403,22 +450,34 @@ export default function LandingPage() {
               transition={{ duration: 0.6 }}
               className="grid grid-cols-2 gap-4"
             >
-              <motion.div whileHover={{ y: -5 }} className="bg-indigo-50 dark:bg-gray-800 p-6 rounded-lg">
-                <div className="text-4xl font-bold text-indigo-600 dark:text-indigo-400 mb-2">500+</div>
-                <div className="text-gray-600 dark:text-gray-300">Companies</div>
-              </motion.div>
-              <motion.div whileHover={{ y: -5 }} className="bg-blue-50 dark:bg-gray-800 p-6 rounded-lg">
-                <div className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">10k+</div>
-                <div className="text-gray-600 dark:text-gray-300">Job Seekers</div>
-              </motion.div>
-              <motion.div whileHover={{ y: -5 }} className="bg-emerald-50 dark:bg-gray-800 p-6 rounded-lg">
-                <div className="text-4xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">5k+</div>
-                <div className="text-gray-600 dark:text-gray-300">Placements</div>
-              </motion.div>
-              <motion.div whileHover={{ y: -5 }} className="bg-purple-50 dark:bg-gray-800 p-6 rounded-lg">
-                <div className="text-4xl font-bold text-purple-600 dark:text-purple-400 mb-2">98%</div>
-                <div className="text-gray-600 dark:text-gray-300">Satisfaction</div>
-              </motion.div>
+              {[
+                { value: 500, suffix: "+", label: "Companies", color: "indigo" },
+                { value: 10, suffix: "k+", label: "Job Seekers", color: "blue" },
+                { value: 5, suffix: "k+", label: "Placements", color: "emerald" },
+                { value: 98, suffix: "%", label: "Satisfaction", color: "purple" }
+              ].map((stat, index) => (
+                <motion.div 
+                  key={index}
+                  whileHover={{ y: -5 }} 
+                  className={`bg-${stat.color}-50 dark:bg-gray-800 p-6 rounded-lg`}
+                >
+                  <motion.div 
+                    className={`text-4xl font-bold text-${stat.color}-600 dark:text-${stat.color}-400 mb-2`}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                  >
+                    <CountUp 
+                      start={0} 
+                      end={stat.value} 
+                      duration={2} 
+                      delay={0.5}
+                      suffix={stat.suffix}
+                    />
+                  </motion.div>
+                  <div className="text-gray-600 dark:text-gray-300">{stat.label}</div>
+                </motion.div>
+              ))}
             </motion.div>
           </div>
         </div>
