@@ -26,6 +26,13 @@ export default function RecruiterPage() {
   })
   const [error, setError] = useState("")
   const [successMessage, setSuccessMessage] = useState("")
+  const [showSubscriptionModal, setShowSubscriptionModal] = useState(false)
+  
+  // Function to handle tool button clicks
+  const handleToolClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    setShowSubscriptionModal(true)
+  }
 
   useEffect(() => {
     // Check if user is logged in
@@ -1308,6 +1315,7 @@ export default function RecruiterPage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={handleToolClick}
                 className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-md text-blue-100 border border-blue-400/30 transition"
               >
                 Try Matching
@@ -1346,6 +1354,7 @@ export default function RecruiterPage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={handleToolClick}
                 className="px-4 py-2 bg-purple-500/20 hover:bg-purple-500/30 rounded-md text-purple-100 border border-purple-400/30 transition"
               >
                 Schedule Now
@@ -1384,6 +1393,7 @@ export default function RecruiterPage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={handleToolClick}
                 className="px-4 py-2 bg-green-500/20 hover:bg-green-500/30 rounded-md text-green-100 border border-green-400/30 transition"
               >
                 View Analytics
@@ -1435,6 +1445,7 @@ export default function RecruiterPage() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={handleToolClick}
                       className="text-sm px-3 py-1.5 bg-indigo-500/20 hover:bg-indigo-500/30 rounded-md text-indigo-100 border border-indigo-400/30 transition"
                     >
                       Create Bulk Posts
@@ -1458,6 +1469,7 @@ export default function RecruiterPage() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={handleToolClick}
                       className="text-sm px-3 py-1.5 bg-orange-500/20 hover:bg-orange-500/30 rounded-md text-orange-100 border border-orange-400/30 transition"
                     >
                       Create Campaign
@@ -1481,6 +1493,7 @@ export default function RecruiterPage() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={handleToolClick}
                       className="text-sm px-3 py-1.5 bg-pink-500/20 hover:bg-pink-500/30 rounded-md text-pink-100 border border-pink-400/30 transition"
                     >
                       Schedule Interview
@@ -1504,6 +1517,7 @@ export default function RecruiterPage() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={handleToolClick}
                       className="text-sm px-3 py-1.5 bg-cyan-500/20 hover:bg-cyan-500/30 rounded-md text-cyan-100 border border-cyan-400/30 transition"
                     >
                       Create Tests
@@ -1527,6 +1541,7 @@ export default function RecruiterPage() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={handleToolClick}
                       className="text-sm px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 rounded-md text-amber-100 border border-amber-400/30 transition"
                     >
                       Parse Resumes
@@ -1550,6 +1565,7 @@ export default function RecruiterPage() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={handleToolClick}
                       className="text-sm px-3 py-1.5 bg-lime-500/20 hover:bg-lime-500/30 rounded-md text-lime-100 border border-lime-400/30 transition"
                     >
                       Build Workflow
@@ -1573,6 +1589,7 @@ export default function RecruiterPage() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={handleToolClick}
                       className="text-sm px-3 py-1.5 bg-rose-500/20 hover:bg-rose-500/30 rounded-md text-rose-100 border border-rose-400/30 transition"
                     >
                       View Reports
@@ -1596,6 +1613,7 @@ export default function RecruiterPage() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
+                      onClick={handleToolClick}
                       className="text-sm px-3 py-1.5 bg-violet-500/20 hover:bg-violet-500/30 rounded-md text-violet-100 border border-violet-400/30 transition"
                     >
                       View Portal
@@ -1767,6 +1785,184 @@ export default function RecruiterPage() {
                   </motion.button>
                 </div>
               </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Subscription Modal */}
+      <AnimatePresence>
+        {showSubscriptionModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-lg shadow-xl w-full max-w-3xl p-6"
+            >
+              <div className="text-center mb-8">
+                <h2 className="text-2xl font-bold mb-2">Upgrade to Access Premium Tools</h2>
+                <p className="text-gray-600">Choose a subscription plan that works for your recruitment needs</p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {/* Basic Plan */}
+                <motion.div
+                  whileHover={{ y: -10, boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.4)" }}
+                  className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
+                >
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Basic</h3>
+                    <div className="text-3xl font-bold text-blue-600 mb-4">$20<span className="text-sm text-gray-500 font-normal">/month</span></div>
+                    <ul className="space-y-3 mb-6">
+                      <li className="flex items-start space-x-2">
+                        <svg className="h-5 w-5 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-600">Basic job posting tools</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <svg className="h-5 w-5 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-600">Standard applicant tracking</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <svg className="h-5 w-5 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-600">Email support</span>
+                      </li>
+                      <li className="flex items-start space-x-2 opacity-50">
+                        <svg className="h-5 w-5 text-gray-400 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-500">Advanced analytics</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="px-6 pb-6">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-md"
+                    >
+                      Subscribe Now
+                    </motion.button>
+                  </div>
+                </motion.div>
+
+                {/* Intermediate Plan */}
+                <motion.div
+                  whileHover={{ y: -10, boxShadow: "0 10px 25px -5px rgba(124, 58, 237, 0.4)" }}
+                  className="bg-white rounded-xl shadow-lg border-2 border-purple-500 overflow-hidden relative"
+                >
+                  <div className="absolute top-0 right-0 bg-purple-500 text-white px-3 py-1 text-sm font-medium">
+                    POPULAR
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Intermediate</h3>
+                    <div className="text-3xl font-bold text-purple-600 mb-4">$40<span className="text-sm text-gray-500 font-normal">/month</span></div>
+                    <ul className="space-y-3 mb-6">
+                      <li className="flex items-start space-x-2">
+                        <svg className="h-5 w-5 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-600">Everything in Basic</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <svg className="h-5 w-5 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-600">Advanced candidate matching</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <svg className="h-5 w-5 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-600">Basic analytics</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <svg className="h-5 w-5 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-600">Priority email support</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="px-6 pb-6">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg shadow-md"
+                    >
+                      Subscribe Now
+                    </motion.button>
+                  </div>
+                </motion.div>
+
+                {/* Premium Plan */}
+                <motion.div
+                  whileHover={{ y: -10, boxShadow: "0 10px 25px -5px rgba(16, 185, 129, 0.4)" }}
+                  className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden"
+                >
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Premium</h3>
+                    <div className="text-3xl font-bold text-emerald-600 mb-4">$50<span className="text-sm text-gray-500 font-normal">/month</span></div>
+                    <ul className="space-y-3 mb-6">
+                      <li className="flex items-start space-x-2">
+                        <svg className="h-5 w-5 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-600">Everything in Intermediate</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <svg className="h-5 w-5 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-600">Full access to all tools</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <svg className="h-5 w-5 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-600">Advanced analytics & reports</span>
+                      </li>
+                      <li className="flex items-start space-x-2">
+                        <svg className="h-5 w-5 text-green-500 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-gray-600">Dedicated account manager</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="px-6 pb-6">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow-md"
+                    >
+                      Subscribe Now
+                    </motion.button>
+                  </div>
+                </motion.div>
+              </div>
+
+              <div className="mt-8 text-center">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowSubscriptionModal(false)}
+                  className="px-6 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-md shadow-sm font-medium"
+                >
+                  Maybe Later
+                </motion.button>
+              </div>
             </motion.div>
           </motion.div>
         )}

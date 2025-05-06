@@ -3,7 +3,15 @@ import { neon } from '@neondatabase/serverless';
 import bcrypt from 'bcryptjs';
 
 const DATABASE_URL = "postgresql://job-application_owner:npg_9BjEXIPZcN3O@ep-jolly-leaf-a4qs5f3h-pooler.us-east-1.aws.neon.tech/job-application?sslmode=require";
-const sql = neon(DATABASE_URL);
+const sql = neon(DATABASE_URL, { 
+  fetchOptions: {
+    // Increase timeout to 30 seconds
+    timeout: 30000,
+    // Add retry logic
+    retryDelay: 1000,
+    retryCount: 3
+  }
+});
 
 // Check if tables exist first, create them if they don't
 async function ensureTablesExist() {
